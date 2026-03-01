@@ -21,6 +21,8 @@
 
   // ── private Variablen (alphabetisch) ─────────────────────────────────────
   let _activeView    = 'day';
+  let _pickerMonth   = new Date().getMonth() + 1;
+  let _pickerYear    = new Date().getFullYear();
   let _selectedDate  = _todayStr();
   let _selectedMonth = new Date().getMonth() + 1;
   let _selectedYear  = new Date().getFullYear();
@@ -74,13 +76,38 @@
 
   // ── private Render-Funktionen (alphabetisch) ─────────────────────────────
 
-  /** Aktualisiert die Tag-Eingabeansicht mit dem aktuell gewählten Datum. */
+  /**
+   * Callback für Tag-Auswahl im Monatskalender.
+   * Aktualisiert _selectedDate und rendert das Formular neu.
+   * @param {string} dateStr - Gewähltes Datum im Format YYYY-MM-DD
+   */
+  function _onDayTap(dateStr) {
+    _selectedDate = dateStr;
+    // Kalender neu rendern um Auswahl-Markierung zu aktualisieren
+    UI.renderDayPicker(
+      document.getElementById('day-picker-container'),
+      _pickerYear, _pickerMonth, _selectedDate, _onDayTap
+    );
+    _renderDayForm();
+  }
+
+  /** Aktualisiert die Tag-Eingabeansicht: Kalender + Formular. */
   function _renderDay() {
-    document.getElementById('day-title').textContent = _formatDateLong(_selectedDate);
-    const entry    = Storage.getEntry(_selectedDate);
-    const settings = Storage.getSettings();
+    document.getElementById('picker-month-title').textContent =
+      MONTH_NAMES[_pickerMonth - 1] + ' ' + _pickerYear;
+    UI.renderDayPicker(
+      document.getElementById('day-picker-container'),
+      _pickerYear, _pickerMonth, _selectedDate, _onDayTap
+    );
+    _renderDayForm();
+  }
+
+  /** Aktualisiert nur das Eingabeformular für den gewählten Tag. */
+  function _renderDayForm() {
+    document.getElementById('selected-day-label').textContent = _formatDateLong(_selectedDate);
+    const entry = Storage.getEntry(_selectedDate);
     document.getElementById('input-hours').value = entry ? entry.hours : 0;
-    document.getElementById('input-note').value = entry ? (entry.note || '') : '';
+    document.getElementById('input-note').value  = entry ? (entry.note || '') : '';
   }
 
   /** Aktualisiert die Monatsübersichtsansicht. */
@@ -118,20 +145,16 @@
       btn.addEventListener('click', () => showView(btn.dataset.view));
     });
 
-    // Tag-Navigation: vorheriger / nächster Tag
-    document.getElementById('btn-prev-day').addEventListener('click', () => {
-      const [y, m, d] = _selectedDate.split('-').map(Number);
-      const date = new Date(y, m - 1, d);
-      date.setDate(date.getDate() - 1);
-      _selectedDate = _dateToStr(date);
+    // Picker-Monat-Navigation in der Tag-Ansicht
+    document.getElementById('btn-prev-picker-month').addEventListener('click', () => {
+      if (_pickerMonth === 1) { _pickerMonth = 12; _pickerYear--; }
+      else                    { _pickerMonth--; }
       _renderDay();
     });
 
-    document.getElementById('btn-next-day').addEventListener('click', () => {
-      const [y, m, day] = _selectedDate.split('-').map(Number);
-      const d = new Date(y, m - 1, day);
-      d.setDate(d.getDate() + 1);
-      _selectedDate = _dateToStr(d);
+    document.getElementById('btn-next-picker-month').addEventListener('click', () => {
+      if (_pickerMonth === 12) { _pickerMonth = 1; _pickerYear++; }
+      else                     { _pickerMonth++; }
       _renderDay();
     });
 
@@ -191,7 +214,13 @@
     });
     _activeView = name;
 
-    if (name === 'day')      _renderDay();
+    if (name === 'day') {
+      // Picker-Monat auf den Monat des gewählten Datums synchronisieren
+      const parts = _selectedDate.split('-').map(Number);
+      _pickerYear  = parts[0];
+      _pickerMonth = parts[1];
+      _renderDay();
+    }
     if (name === 'month')    _renderMonth();
     if (name === 'year')     _renderYear();
     if (name === 'settings') _renderSettings();

@@ -18,11 +18,13 @@
   <!-- ═══════════════════════════════════════════════════════ View: Tag -->
   <div id="view-day" class="view">
     <header class="view-header">
-      <button id="btn-prev-day" aria-label="Vorheriger Tag">&#8249;</button>
-      <h1 id="day-title"></h1>
-      <button id="btn-next-day" aria-label="Nächster Tag">&#8250;</button>
+      <button id="btn-prev-picker-month" aria-label="Vorheriger Monat">&#8249;</button>
+      <h1 id="picker-month-title"></h1>
+      <button id="btn-next-picker-month" aria-label="Nächster Monat">&#8250;</button>
     </header>
     <main>
+      <div id="day-picker-container"></div>
+      <p id="selected-day-label" class="selected-day-label"></p>
       <div class="form-group">
         <label for="input-hours">Stunden</label>
         <input type="number" id="input-hours" min="0" max="24" step="0.25"

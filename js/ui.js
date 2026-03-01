@@ -39,6 +39,17 @@ const UI = (() => {
     return new Date(y, m - 1, d);
   }
 
+  /**
+   * Gibt das heutige Datum als YYYY-MM-DD-String zurück (lokale Zeit).
+   * @returns {string}
+   */
+  function _todayStr() {
+    const d = new Date();
+    return d.getFullYear() + '-'
+      + String(d.getMonth() + 1).padStart(2, '0') + '-'
+      + String(d.getDate()).padStart(2, '0');
+  }
+
   // ── public Funktionen (alphabetisch) ─────────────────────────────────────
 
   /**
@@ -137,6 +148,59 @@ const UI = (() => {
       </table>`;
   }
 
+  /**
+   * Rendert den Monatskalender zur Tag-Auswahl in den Container.
+   * Wochenenden und Tage mit vorhandenen Einträgen werden visuell markiert.
+   * @param {HTMLElement} container    - Ziel-Element
+   * @param {number}      year         - Anzuzeigendes Jahr
+   * @param {number}      month        - Anzuzeigender Monat (1–12)
+   * @param {string}      selectedDate - Aktuell gewähltes Datum (YYYY-MM-DD)
+   * @param {Function}    onDayTap     - Callback(dateStr: string) bei Tag-Auswahl
+   */
+  function renderDayPicker(container, year, month, selectedDate, onDayTap) {
+    const firstDay    = new Date(year, month - 1, 1);
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const today       = _todayStr();
+
+    // Europäischer Wochenstart: Montag = 0, Sonntag = 6
+    let startOffset = firstDay.getDay() - 1;
+    if (startOffset < 0) startOffset = 6;
+
+    // Tage mit Einträgen ermitteln
+    const entries    = Storage.getEntriesForMonth(year, month);
+    const entryDates = new Set(entries.filter(e => e.hours > 0).map(e => e.date));
+
+    let cells = '';
+    for (let i = 0; i < startOffset; i++) {
+      cells += '<div class="dc dc--empty"></div>';
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr   = year + '-' + String(month).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+      const date      = new Date(year, month - 1, d);
+      const isWeekend = date.getDay() === 0 || date.getDay() === 6;
+
+      let cls = 'dc';
+      if (dateStr === selectedDate) cls += ' dc--selected';
+      if (dateStr === today)        cls += ' dc--today';
+      if (isWeekend)                cls += ' dc--weekend';
+      if (entryDates.has(dateStr))  cls += ' dc--has-entry';
+
+      cells += `<div class="${cls}" data-date="${dateStr}">${d}</div>`;
+    }
+
+    container.innerHTML = `
+      <div class="day-picker">
+        <div class="day-picker-wd">
+          <span>Mo</span><span>Di</span><span>Mi</span><span>Do</span><span>Fr</span><span>Sa</span><span>So</span>
+        </div>
+        <div class="day-picker-grid">${cells}</div>
+      </div>`;
+
+    container.querySelectorAll('.dc[data-date]').forEach(cell => {
+      cell.addEventListener('click', () => onDayTap(cell.dataset.date));
+    });
+  }
+
   // ── public API ────────────────────────────────────────────────────────────
-  return { renderMonth, renderYear };
+  return { renderDayPicker, renderMonth, renderYear };
 })();

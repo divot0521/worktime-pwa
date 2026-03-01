@@ -111,6 +111,90 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   Day-Picker (Monatskalender zur Tag-Auswahl)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.day-picker {
+  margin-bottom: 4px;
+  user-select: none;
+}
+
+.day-picker-wd,
+.day-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.day-picker-wd {
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 2px;
+  padding-bottom: 4px;
+}
+
+.day-picker-wd span {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Einzelne Tag-Zelle */
+.dc {
+  align-items: center;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.9rem;
+  justify-content: center;
+  min-height: 38px;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dc--empty { cursor: default; }
+
+.dc--weekend { color: var(--color-text-secondary); }
+
+/* Eintrag vorhanden: kleiner Punkt unten */
+.dc--has-entry::after {
+  background: var(--color-accent);
+  border-radius: 50%;
+  bottom: 4px;
+  content: '';
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 4px;
+}
+
+/* Heute: Rahmen */
+.dc--today {
+  border: 2px solid var(--color-accent);
+  font-weight: 700;
+}
+
+/* Ausgewählt: gefüllter Kreis */
+.dc--selected {
+  background: var(--color-accent);
+  color: #fff;
+  font-weight: 700;
+}
+
+.dc--selected::after { background: #fff; }
+
+.dc:not(.dc--empty):not(.dc--selected):active {
+  background: var(--color-border);
+}
+
+/* Label für den gewählten Tag */
+.selected-day-label {
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  margin: 8px 0 16px;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    Formular
    ═══════════════════════════════════════════════════════════════════════════ */
 .form-group {
