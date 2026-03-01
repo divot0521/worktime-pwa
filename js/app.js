@@ -79,9 +79,7 @@
     document.getElementById('day-title').textContent = _formatDateLong(_selectedDate);
     const entry    = Storage.getEntry(_selectedDate);
     const settings = Storage.getSettings();
-    document.getElementById('input-hours').value = entry
-      ? entry.hours
-      : (settings.defaultHours || '');
+    document.getElementById('input-hours').value = entry ? entry.hours : 0;
     document.getElementById('input-note').value = entry ? (entry.note || '') : '';
   }
 
