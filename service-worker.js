@@ -1,10 +1,10 @@
 /**
  * Service Worker für die Arbeitszeiterfassung.
  * Strategie: Cache-First für alle statischen Assets.
- * Cache-Name beim Hinzufügen neuer Assets erhöhen (worktime-v1 → worktime-v2).
+ * Cache-Name beim Hinzufügen neuer Assets erhöhen (worktime-v1 → worktime-v3).
  */
 
-const CACHE_NAME = 'worktime-v2';
+const CACHE_NAME = 'worktime-v3';
 
 /** Liste aller zu cachenden statischen Assets. */
 const ASSETS = [

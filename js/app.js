@@ -77,6 +77,19 @@
   // ── private Render-Funktionen (alphabetisch) ─────────────────────────────
 
   /**
+   * Passt _selectedDate an den aktuellen Picker-Monat an.
+   * Behält die Tageszahl bei, kürzt sie aber auf den letzten gültigen Tag.
+   */
+  function _clampSelectedDateToPickerMonth() {
+    const currentDay  = parseInt(_selectedDate.split('-')[2], 10);
+    const daysInMonth = new Date(_pickerYear, _pickerMonth, 0).getDate();
+    const day         = Math.min(currentDay, daysInMonth);
+    _selectedDate     = _pickerYear + '-'
+      + String(_pickerMonth).padStart(2, '0') + '-'
+      + String(day).padStart(2, '0');
+  }
+
+  /**
    * Callback für Tag-Auswahl im Monatskalender.
    * Aktualisiert _selectedDate und rendert das Formular neu.
    * @param {string} dateStr - Gewähltes Datum im Format YYYY-MM-DD
@@ -149,12 +162,14 @@
     document.getElementById('btn-prev-picker-month').addEventListener('click', () => {
       if (_pickerMonth === 1) { _pickerMonth = 12; _pickerYear--; }
       else                    { _pickerMonth--; }
+      _clampSelectedDateToPickerMonth();
       _renderDay();
     });
 
     document.getElementById('btn-next-picker-month').addEventListener('click', () => {
       if (_pickerMonth === 12) { _pickerMonth = 1; _pickerYear++; }
       else                     { _pickerMonth++; }
+      _clampSelectedDateToPickerMonth();
       _renderDay();
     });
 
