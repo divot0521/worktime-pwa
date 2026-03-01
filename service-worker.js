@@ -4,7 +4,7 @@
  * Cache-Name beim Hinzufügen neuer Assets erhöhen (worktime-v1 → worktime-v2).
  */
 
-const CACHE_NAME = 'worktime-v1';
+const CACHE_NAME = 'worktime-v2';
 
 /** Liste aller zu cachenden statischen Assets. */
 const ASSETS = [
