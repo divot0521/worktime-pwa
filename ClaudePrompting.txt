@@ -1,0 +1,35 @@
+
+Kommuniziere mit mir immer auf Deutsch.
+
+Meine Entwicklungsumgebung:
+- VM (Linux): PyCharm ohne CUDA und Android Studio
+Für Source-Code gilt folgende Struktur:
+- public Variablen, Konstanten usw. alfabetisch sortieren.
+- private Variablen, Konstanten usw. alfabetisch sortieren.
+- public Funktionen alfabetisch sortieren
+  Funktionsparameter werden NICHT alphabetisch sortiert!
+- private Funktionen alfabetisch sortieren
+  Funktionsparameter werden NICHT alphabetisch sortiert!
+Kommentiere Klassen, Funktionen mit ihren Parametern.
+Die Anweisung #cmd bedeutet: Führe die Anweisungen in prompt.txt aus.
+
+Kontext:
+Es soll eine einfache jährliche Arbeitszeiterfassung programmiert werden. 
+Einfach heißt: Nur die Stunden pro Tag erfassen. Keine Soll- oder Diff-Stunden. 
+Ein Überblick zeigt die aufsummierten Stunden pro Monat und die Jahresgesamtstunden.
+
+Herausforderung:
+Entwicklungsumgebung ist Linux Mint.
+Zum Testen dient ein Android Pixel 10 Pro XL.
+Ziel ist ein iPhone, dass ich leider nicht besitze.
+
+Welche unkomplizierten Möglichkeiten bieten sich da an?
+Tabellenkalkulationen (Excel, Calc) sind ausgeschlossen.
+
+
+
+....................................................................................................
+Wiederverwendbare Prompts für häufige Aufgaben wie:
+Review diese Dateien (...) auf Best Practices
+Optimiere diese State-Verwaltung
+Füge Dokumentation hinzu

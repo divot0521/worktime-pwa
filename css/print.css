@@ -1,0 +1,29 @@
+/* Druck-CSS: Nur die aktive Tabellenansicht wird gedruckt.
+   Verwendung: window.print() für PDF-Export. */
+@media print {
+  .tab-bar,
+  .view-header button {
+    display: none !important;
+  }
+
+  .view.hidden {
+    display: none !important;
+  }
+
+  .view {
+    display: block !important;
+    padding-bottom: 0;
+  }
+
+  .view-header {
+    background: none !important;
+    color: #000 !important;
+    position: static;
+  }
+
+  .time-table tr.weekend > td {
+    background: #f5f5f5 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
